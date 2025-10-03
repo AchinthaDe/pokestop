@@ -3,4 +3,4 @@ builder = "dockerfile"
 dockerfilePath = ".railway/Dockerfile"
 
 [deploy]
-startCommand = "frankenphp php-server --listen :$PORT --root /app/public"
+# Use Dockerfile CMD (/start.sh). No explicit startCommand needed.

@@ -47,5 +47,9 @@ RUN mkdir -p storage/framework/{sessions,views,cache,testing} storage/logs boots
 # Expose port
 EXPOSE 8080
 
+# Copy start script
+COPY ./.railway/start.sh /start.sh
+RUN chmod +x /start.sh
+
 # Start command
-CMD frankenphp php-server --listen :${PORT:-8080} --root /app/public
+CMD ["/start.sh"]
