@@ -39,7 +39,7 @@ RUN sed -i 's|/var/www/html|/var/www/html/public|g' \
 
 EXPOSE 8080
 
-COPY start.sh /start.sh
+COPY .railway/start.sh /start.sh
 RUN chmod +x /start.sh
 
 CMD ["/start.sh"]
