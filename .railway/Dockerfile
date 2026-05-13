@@ -27,12 +27,12 @@ RUN php artisan storage:link || true
 # Node build
 RUN npm ci && npm run build
 
-# Copy Nginx config
-COPY nginx.conf /etc/nginx/sites-available/default
+# Copy Nginx config from .railway subdirectory
+COPY .railway/nginx.conf /etc/nginx/sites-available/default
 
-# Copy and set up start script
-COPY start-fpm.sh /start.sh
+# Copy and set up start script from .railway subdirectory
+COPY .railway/start-fpm.sh /start.sh
 RUN chmod +x /start.sh
 
 EXPOSE 8080
-CMD [".railway/start.sh"]
+CMD ["/start.sh"]
