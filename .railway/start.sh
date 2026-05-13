@@ -4,6 +4,20 @@ set -e
 PORT_VALUE="${PORT:-8080}"
 echo "Starting Apache on port ${PORT_VALUE}"
 
+# Debug: Show current MPM state
+echo "=== MPMs before cleanup ==="
+ls -la /etc/apache2/mods-enabled/mpm_* 2>/dev/null || echo "No MPM symlinks found"
+
+# Forcefully remove all MPM symlinks and recreate only prefork
+rm -f /etc/apache2/mods-enabled/mpm_*.load
+rm -f /etc/apache2/mods-enabled/mpm_*.conf
+ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load
+ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
+
+# Debug: Show MPM state after cleanup
+echo "=== MPMs after cleanup ==="
+ls -la /etc/apache2/mods-enabled/mpm_*
+
 # Configure port
 cat > /etc/apache2/ports.conf <<EOF
 Listen ${PORT_VALUE}
@@ -12,11 +26,6 @@ EOF
 sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT_VALUE}>/g" \
     /etc/apache2/sites-available/000-default.conf
 
-# Force prefork MPM (disable others)
-a2dismod mpm_event mpm_worker 2>/dev/null || true
-a2enmod mpm_prefork
-
-# Laravel cache
 php artisan config:cache || true
 
 exec apache2-foreground
