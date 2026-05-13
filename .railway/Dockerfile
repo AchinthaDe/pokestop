@@ -1,3 +1,8 @@
+# Disable prefork if event is already loaded
+RUN a2dismod mpm_prefork || true
+RUN a2dismod mpm_worker || true
+RUN a2enmod mpm_event
+
 # Base PHP + Apache
 FROM php:8.2-apache
 
@@ -52,6 +57,9 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 # Expose Apache port
 EXPOSE 80
+
+RUN a2dismod mpm_prefork mpm_worker || true
+RUN a2enmod mpm_event
 
 # Start Apache
 CMD ["apache2-foreground"]
