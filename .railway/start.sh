@@ -11,8 +11,8 @@ ls -la /etc/apache2/mods-enabled/mpm_* 2>/dev/null || echo "No MPM symlinks foun
 # Forcefully remove all MPM symlinks and recreate only prefork
 rm -f /etc/apache2/mods-enabled/mpm_*.load
 rm -f /etc/apache2/mods-enabled/mpm_*.conf
-ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load
-ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
+ln -sf /etc/apache2/mods-available/mpm_event.load /etc/apache2/mods-enabled/mpm_event.load
+ln -sf /etc/apache2/mods-available/mpm_event.conf /etc/apache2/mods-enabled/mpm_event.conf
 
 # Debug: Show MPM state after cleanup
 echo "=== MPMs after cleanup ==="
