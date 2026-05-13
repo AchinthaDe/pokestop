@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -e
 
-PORT_VALUE="${PORT:-8080}"
+PORT_VALUE="${PORT:-80}"
 echo "Starting Apache on port ${PORT_VALUE}"
 
 # Debug: Show current MPM state
