@@ -37,6 +37,9 @@ RUN npm ci && npm run build
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' \
     /etc/apache2/sites-available/000-default.conf
 
+# checking for the files that run MPM
+RUN grep -R "mpm_" /etc/apache2
+
 # Force single MPM
 RUN rm -f /etc/apache2/mods-enabled/mpm_* \
     && a2enmod mpm_prefork
