@@ -37,6 +37,9 @@ RUN npm ci && npm run build
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' \
     /etc/apache2/sites-available/000-default.conf
 
+# Force single MPM
+RUN a2dismod mpm_event mpm_worker || true && a2enmod mpm_prefork
+
 EXPOSE 80
 
 COPY .railway/start.sh /start.sh
