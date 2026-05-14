@@ -35,7 +35,7 @@ COPY .railway/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Copy and set up start script from .railway subdirectory
 COPY .railway/start-fpm.sh /start.sh
-RUN chmod +x /start.sh
+RUN chmod +x /start.sh && ls -la /start.sh && head -3 /start.sh
 
 EXPOSE 8080
 CMD ["/start.sh"]
