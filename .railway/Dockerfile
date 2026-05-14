@@ -1,9 +1,9 @@
 FROM php:8.2-fpm
 
-# Install dependencies including Nginx
+# Install dependencies including Nginx and net-tools
 RUN apt-get update && apt-get install -y \
     nginx git zip unzip libpng-dev libjpeg-dev libfreetype6-dev \
-    libonig-dev libxml2-dev libzip-dev curl nodejs npm \
+    libonig-dev libxml2-dev libzip-dev curl nodejs npm net-tools procps \
     && docker-php-ext-install pdo pdo_mysql zip gd
 
 # MongoDB PHP driver
@@ -29,6 +29,9 @@ RUN npm ci && npm run build
 
 # Copy Nginx config from .railway subdirectory
 COPY .railway/nginx.conf /etc/nginx/sites-available/default
+
+# Copy PHP-FPM pool config from .railway subdirectory
+COPY .railway/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Copy and set up start script from .railway subdirectory
 COPY .railway/start-fpm.sh /start.sh
