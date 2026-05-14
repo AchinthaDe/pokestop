@@ -1,33 +1,18 @@
-#!/usr/bin/env sh
+#!/bin/sh
+echo "Container started - script is running"
 set -e
 
-echo "=== Starting PHP-FPM + Nginx ==="
+echo "Working directory: $(pwd)"
+echo "User: $(whoami)"
 
-# Laravel config cache
-echo "Running artisan config:cache..."
-php artisan config:cache || echo "Warning: config:cache failed"
-
-# Start PHP-FPM in daemon mode
+# Start PHP-FPM first
 echo "Starting PHP-FPM..."
-php-fpm -D
+php-fpm -D || { echo "PHP-FPM failed to start"; exit 1; }
 
-# Wait a moment for PHP-FPM to fully start
 sleep 2
+echo "PHP-FPM started, checking process..."
+ps aux | grep php-fpm | head -5
 
-# Verify PHP-FPM is running
-if pgrep php-fpm > /dev/null; then
-    echo "✓ PHP-FPM is running"
-    echo "PHP-FPM processes:"
-    ps aux | grep php-fpm | grep -v grep
-else
-    echo "✗ PHP-FPM failed to start!"
-    exit 1
-fi
-
-# Check if PHP-FPM is listening on port 9000
-echo "Checking PHP-FPM port 9000..."
-netstat -tuln | grep 9000 || echo "Warning: Port 9000 not listening"
-
-# Start Nginx in foreground
+# Start Nginx
 echo "Starting Nginx..."
-nginx -g 'daemon off;'
+exec nginx -g 'daemon off;'
