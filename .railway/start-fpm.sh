@@ -37,9 +37,9 @@ echo "Testing PHP execution..."
 echo '<?php echo "PHP works\n"; ?>' > /tmp/test.php
 php /tmp/test.php || echo "PHP execution failed!"
 
-# Create symlink for logs
-ln -sf /dev/stdout /var/log/nginx/access.log
-ln -sf /dev/stderr /var/log/nginx/error.log
+# Create test HTML file
+echo '<html><body><h1>Static file works</h1></body></html>' > /var/www/html/public/test.html
+echo "Created test.html - visit /test.html to verify Nginx is working"
 
 # Start Nginx with error logging
 echo "Starting Nginx..."
